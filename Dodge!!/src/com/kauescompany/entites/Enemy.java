@@ -11,9 +11,83 @@ public class Enemy extends Entity {
 	
 	private int direction;
 	private int speed;
+	private int rand;
 	
 	public Enemy(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
+		
+		if(new Random().nextInt(100) < 80) {
+			rand = new Random().nextInt(100);
+			
+			if(rand < 25) {
+				//Baixo
+				this.y = new Random().nextInt(Game.HEIGHT);
+				this.x = new Random().nextInt(105 / Game.SCALE);
+				
+				rand = new Random().nextInt(3);
+				if(rand == 0) {
+					this.direction = 1;
+				}else if(rand == 1) {
+					this.direction = 5;
+				}else if(rand == 2) {
+					this.direction = 7;
+				}
+			}else if(rand >= 25 && rand < 50) {
+				//Cima
+				this.y = new Random().nextInt(105 / Game.SCALE);
+				this.x = new Random().nextInt(Game.WIDTH * Game.SCALE);
+				
+				rand = new Random().nextInt(3);
+				if(rand == 0) {
+					this.direction = 0;
+				}else if(rand == 1) {
+					this.direction = 4;
+				}else if(rand == 2) {
+					this.direction = 6;
+				}
+			}else if(rand >= 50 && rand < 75) {
+				//Direita
+				this.y = new Random().nextInt(Game.HEIGHT * Game.SCALE);
+				
+				this.x = new Random().nextInt(Game.WIDTH * Game.SCALE);
+				while(this.x <= Game.WIDTH - (105 / Game.SCALE)) {
+					this.x = new Random().nextInt(Game.WIDTH * Game.SCALE);
+				}
+				
+				rand = new Random().nextInt(3);
+				if(rand == 0) {
+					this.direction = 2;
+				}else if(rand == 1) {
+					this.direction = 4;
+				}else if(rand == 2) {
+					this.direction = 5;
+				}
+			}else if(rand >= 75 && rand < 100) {
+				//Esquerda
+				this.y = new Random().nextInt(Game.HEIGHT * Game.SCALE);
+				while(this.y <= Game.HEIGHT - (105 / Game.SCALE)) {
+					this.y = new Random().nextInt(Game.HEIGHT * Game.SCALE);
+				}
+				
+				this.x = new Random().nextInt(Game.WIDTH * Game.SCALE);
+				
+				rand = new Random().nextInt(3);
+				if(rand == 0) {
+					this.direction = 3;
+				}else if(rand == 1) {
+					this.direction = 6;
+				}else if(rand == 2) {
+					this.direction = 7;
+				}
+			}
+			
+		}else {
+			this.y = new Random().nextInt(Game.HEIGHT);
+			this.x = new Random().nextInt(Game.WIDTH);
+		}/*else {
+			this.y = Game.player.getX() - Random().nextInt(45);
+			this.x = Game.player.getY() - Random().nextInt(45);
+		}*/
 		
 		while(this.width < 30) {
 			this.width = new Random().nextInt(65);
@@ -23,15 +97,35 @@ public class Enemy extends Entity {
 			this.height = new Random().nextInt(65);
 		}
 		
+		/*if(new Random().nextInt(100) <= 50) {
+			sprite = Game.sheet.getSprite(32, 0, width, height);
+		}else {
+			sprite = Game.sheet.getSprite(96, 0, width, height);
+		}*/
 		
-		while(this.speed < 1) {
-			this.speed = new Random().nextInt(3);
+		if(Game.level == 2) {
+			while(this.speed < 2) {
+				this.speed = new Random().nextInt(3);
+			}
+		}else if(Game.level >= 4) {
+				while(this.speed < 2) {
+					this.speed = new Random().nextInt(4);
+				}
+			}else {
+			while(this.speed < 1) {
+				this.speed = new Random().nextInt(3);
+			}
 		}
 		
-		this.direction = new Random().nextInt(8);
+		//this.direction = new Random().nextInt(8);
 		
 	}
 	
+	private Random Random() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void tick() {
 		if(direction == 0) {
 			//Baixo
@@ -95,7 +189,7 @@ public class Enemy extends Entity {
 	
 	public void render(Graphics g) {
 		g.setColor(Color.red);
-		g.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		g.drawRect(this.getX(), this.getY(), width, height);
 	}
 	
 }

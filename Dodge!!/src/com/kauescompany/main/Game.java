@@ -4,8 +4,11 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ import javax.swing.JFrame;
 
 import com.kauescompany.entites.Enemy;
 import com.kauescompany.entites.Player;
+import com.kauescompany.graphics.Spritesheet;
+import com.kauescompany.graphics.UI;
 
 public class Game extends Canvas implements Runnable, KeyListener{
 	
@@ -32,8 +37,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private BufferedImage image;
 	
 	public static Player player;
+	public static UI ui;
+	public static Spritesheet sheet;
+	public static Spritesheet map;
 	
-	public static int cont;
+	public static int cont, cont0, type;
+	public static int level = 0;
 	
 	public Game() {
 		addKeyListener(this);
@@ -42,8 +51,11 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		//inicializando objetos
 		
+		ui = new UI();
 		enemies = new ArrayList<Enemy>();
 		player = new Player(10, 10, 20, 20, null);
+		sheet = new Spritesheet("/spritesheet.png");
+		map = new Spritesheet("/map.png");
 	}
 	
 	public void initFrame() {
@@ -77,6 +89,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		game.start();
 	}
 	
+	public static void isColliding() {
+		
+	}
+	
 	public void tick() {
 		/*Lógica das Entidades*/
 		
@@ -87,16 +103,86 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		/**/
 		
-		//cont++;
-		cont = 1000;
-		if(cont >= (60 * 2)) {
-			if(new Random().nextInt(100) < 10) {
-				enemies.add(new Enemy(new Random().nextInt(WIDTH * SCALE), new Random().nextInt(HEIGHT * SCALE),
-							0, 0, null));
+		cont++;
+		cont0++;
+		
+		if(cont >= 60) {
+			if(new Random().nextInt(100) < 12) {
+				type = new Random().nextInt(1);
+				System.out.println(type);
+				enemies.add(new Enemy(0, 0, 0, 0, null));
 			}
+			System.out.println(level);
+			//very easy
+			if(cont >= (60) && level >= 1) {
+				if(new Random().nextInt(100) < 22) {
+					enemies.add(new Enemy(0, 0, 0, 0, null));
+				}}
+			//easy
+			if(cont >= (60) && level >= 2) {
+					if(new Random().nextInt(100) < 25) {
+				enemies.add(new Enemy(0, 0, 0, 0, null));
+					}}
+			//medium
+			if(cont >= (60) && level >= 3) {
+				if(new Random().nextInt(100) < 32) {
+				enemies.add(new Enemy(0, 0, 0, 0, null));
+				}}
+			//medium
+			if(cont >= (60) && level >= 4) {
+				if(new Random().nextInt(100) < 45) {
+				enemies.add(new Enemy(0, 0, 0, 0, null));
+				}}
+			//normal
+			if(cont >= (60) && level >= 5) {
+				if(new Random().nextInt(100) < 75) {
+				enemies.add(new Enemy(0, 0, 0, 0, null));
+				}}
+			//hard
+			if(cont >= (60) && level >= 6) {
+				if(new Random().nextInt(100) < 75) {
+				enemies.add(new Enemy(0, 0, 0, 0, null));
+				}}
 			
-			//cont = 0;
+			ui.seconds++;
+			cont = 0;
 		}
+		
+		
+		if(cont0 > (27 * 60) && level < 1) {
+			level++;
+			cont0 = 0;
+		}
+		if(cont0 > (22 * 60) && level < 2) {
+			level++;
+			cont0 = 0;
+		}
+		if(cont0 > (25 * 60) && level < 3) {
+			level++;
+			cont0 = 0;
+		}
+		if(cont0 > (10 * 60) && level < 4) {
+			level++;
+			cont0 = 0;
+		}
+		if(cont0 > (20 * 60) && level < 5) {
+			level++;
+			cont0 = 0;
+		}
+		if(cont0 > (20 * 60) && level < 6) {
+			level++;
+			cont0 = 0;
+		}
+		if(cont0 > (30 * 60) && level < 7) {
+			level++;
+			cont0 = 0;
+		}
+		
+		/*if(cont >= 60) {
+			enemies.add(new Enemy(0, 0, 0, 0, null));
+			
+			cont = 0;
+		}*/
 	}
 	
 	public void render() {
@@ -114,11 +200,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		/*RENDERIZAÇÃO DO JOGO*/
 		
 		player.render(g);
-		
 		for(int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).render(g);
 		}
-		
+		ui.render(g);
 		/***/
 		
 		g.dispose();
@@ -152,6 +237,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			
 			if(System.currentTimeMillis() - timer >= 1000) {
 				System.out.println("FPS "+frames);
+				ui.FPS = frames;
 				frames = 0;
 				timer += 1000;
 			}
@@ -179,6 +265,14 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		if(e.getKeyCode() == KeyEvent.VK_A
 			|| e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.left = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_F3) {
+			if(ui.F3) {
+				ui.F3 = false;
+			}else {
+				ui.F3 = true;
+			}
 		}
 	}
 	

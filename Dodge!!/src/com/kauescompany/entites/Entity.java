@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.kauescompany.main.Game;
-
 public class Entity {
 	
 	protected double x;
