@@ -17,6 +17,11 @@ public class UI {
 		g.drawString(""+seconds, 2 * Game.SCALE, 5 * Game.SCALE);
 		g.drawString("", 2 * Game.SCALE, 5 * Game.SCALE);
 		
+		g.setColor(Color.RED);
+		g.fillRect(110 * Game.SCALE, 5 * Game.SCALE, (Game.player.initLife / 80) * Game.SCALE, 5 * Game.SCALE);
+		g.setColor(Color.GREEN);
+		g.fillRect(110 * Game.SCALE, 5 * Game.SCALE, (Game.player.life / 80) * Game.SCALE, 5 * Game.SCALE);
+		
 		//Estatisticas para nerds
 		if(F3) {
 			g.setColor(Color.gray);
@@ -34,6 +39,7 @@ public class UI {
 			g.drawString("Width: " + Game.WIDTH, 1 * Game.SCALE, (52) * Game.SCALE);
 			g.drawString("Height: " + Game.HEIGHT, 25 * Game.SCALE,(52) * Game.SCALE);
 			g.drawString("Hits: " + Game.player.hits, 1 * Game.SCALE, (62) * Game.SCALE);
+			g.drawString("Life: " + Game.player.life, 25 * Game.SCALE, (62) * Game.SCALE);
 		}
 	}
 	

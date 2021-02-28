@@ -1,6 +1,7 @@
 package com.kauescompany.entites;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -12,6 +13,7 @@ public class Enemy extends Entity {
 	private int direction;
 	private int speed;
 	private int rand;
+	private boolean value;
 	
 	public Enemy(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -97,11 +99,11 @@ public class Enemy extends Entity {
 			this.height = new Random().nextInt(65);
 		}
 		
-		/*if(new Random().nextInt(100) <= 50) {
-			sprite = Game.sheet.getSprite(32, 0, width, height);
+		if(new Random().nextInt(100) < 50) {
+			value = true;
 		}else {
-			sprite = Game.sheet.getSprite(96, 0, width, height);
-		}*/
+			value = false;
+		}
 		
 		if(Game.level == 2) {
 			while(this.speed < 2) {
@@ -188,8 +190,21 @@ public class Enemy extends Entity {
 	}
 	
 	public void render(Graphics g) {
-		g.setColor(Color.red);
-		g.drawRect(this.getX(), this.getY(), width, height);
+		if(value) {
+			g.setColor(Color.GREEN);
+			
+		}else {
+			g.setColor(Color.RED);
+		}
+		
+		g.drawRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		g.setFont(new Font("arial", Font.BOLD, this.getWidth() + this.getHeight() / 2));
+		
+		if(value) {
+			g.drawString("1", this.getX(), this.getY() + (10 * Game.SCALE));
+		}else {
+			g.drawString("0", this.getX(), this.getY() + (10 * Game.SCALE));
+		}
 	}
 	
 }
