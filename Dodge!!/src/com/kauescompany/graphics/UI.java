@@ -14,13 +14,18 @@ public class UI {
 	public void render(Graphics g) {
 		g.setColor(Color.white);
 		g.setFont(new Font("arial", Font.BOLD, 17));
-		g.drawString(""+seconds, 2 * Game.SCALE, 5 * Game.SCALE);
+		if(Game.level <= 7) {
+			g.drawString("" + seconds, 2 * Game.SCALE, 5 * Game.SCALE);
+		}
 		g.drawString("", 2 * Game.SCALE, 5 * Game.SCALE);
 		
 		g.setColor(Color.RED);
 		g.fillRect(110 * Game.SCALE, 5 * Game.SCALE, (Game.player.initLife / 80) * Game.SCALE, 5 * Game.SCALE);
 		g.setColor(Color.GREEN);
 		g.fillRect(110 * Game.SCALE, 5 * Game.SCALE, (Game.player.life / 80) * Game.SCALE, 5 * Game.SCALE);
+		
+		g.setColor(Color.red);
+		g.drawString("Versão: " + Game.VERSION, 1 * Game.SCALE, (Game.HEIGHT - 2) * Game.SCALE);
 		
 		//Estatisticas para nerds
 		if(F3) {

@@ -95,7 +95,7 @@ public class Enemy extends Entity {
 			this.width = new Random().nextInt(65);
 		}
 		
-		while(this.height < 30){
+		while(this.height < 40){
 			this.height = new Random().nextInt(65);
 		}
 		
@@ -105,7 +105,25 @@ public class Enemy extends Entity {
 			value = false;
 		}
 		
-		if(Game.level == 2) {
+		if(Game.level == 1) {
+			while(speed < 1) {
+				speed = new Random().nextInt(3);
+			}
+		}else if(Game.level == 2 || Game.level == 3) {
+			while(speed < 1) {
+				speed = new Random().nextInt(5);
+			}
+		}else if(Game.level == 4 || Game.level == 5) {
+			while(speed < 2) {
+				speed = new Random().nextInt(6);
+			}
+		}else {
+			while(speed < 3) {
+				speed = new Random().nextInt(8);
+			}
+		}
+		
+		/*if(Game.level == 2) {
 			while(this.speed < 2) {
 				this.speed = new Random().nextInt(3);
 			}
@@ -117,15 +135,10 @@ public class Enemy extends Entity {
 			while(this.speed < 1) {
 				this.speed = new Random().nextInt(3);
 			}
-		}
+		}*/
 		
 		//this.direction = new Random().nextInt(8);
 		
-	}
-	
-	private Random Random() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void tick() {
@@ -181,9 +194,17 @@ public class Enemy extends Entity {
 			x -= speed;
 		}
 		
-		if(y < 0 || y > Game.HEIGHT * Game.SCALE
-			|| x < 0 || x > Game.WIDTH * Game.SCALE) {
+		if(y < 0 || y > (Game.HEIGHT * Game.SCALE) - this.getHeight()
+			|| x < 0 || x > (Game.WIDTH * Game.SCALE) - this.getWidth()) {
 			Game.enemies.remove(this);
+			
+			if(new Random().nextInt(100) <= 3) {
+				if(this.getWidth() > this.getHeight()) {
+					Game.lifepacks.add(new LifePack(new Random().nextInt((Game.WIDTH * Game.SCALE) - this.getWidth()), new Random().nextInt((Game.HEIGHT * Game.SCALE) - this.getHeight()), this.getWidth(), this.getWidth(), Game.sheet.getSprite(0, 0, 16, 16)));
+				}else {
+					Game.lifepacks.add(new LifePack(new Random().nextInt((Game.WIDTH * Game.SCALE) - this.getWidth()), new Random().nextInt((Game.HEIGHT * Game.SCALE) - this.getHeight()), this.getHeight(), this.getHeight(), Game.sheet.getSprite(0, 0, 16, 16)));
+				}
+			}
 			
 			System.out.println("ENIMIGO REMOVIDO!!!");
 		}
@@ -198,12 +219,12 @@ public class Enemy extends Entity {
 		}
 		
 		g.drawRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		g.setFont(new Font("arial", Font.BOLD, this.getWidth() + this.getHeight() / 2));
+		g.setFont(new Font("arial", Font.BOLD, this.getHeight()));
 		
 		if(value) {
-			g.drawString("1", this.getX(), this.getY() + (10 * Game.SCALE));
+			g.drawString("1", this.getX() + Game.SCALE, this.getY() + (10 * Game.SCALE));
 		}else {
-			g.drawString("0", this.getX(), this.getY() + (10 * Game.SCALE));
+			g.drawString("0", this.getX() + Game.SCALE, this.getY() + (10 * Game.SCALE));
 		}
 	}
 	

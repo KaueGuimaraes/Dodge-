@@ -10,7 +10,7 @@ import com.kauescompany.main.Game;
 public class Player extends Entity{
 	
 	public static boolean down, up, right, left;
-	public static double speed = 1.7;
+	public static double speed = 2;
 	public static int life = 10000, hits;
 	public static final int initLife = life;
 	
@@ -35,6 +35,12 @@ public class Player extends Entity{
 			x -= speed;
 		}
 		
+		if(Game.level == 3 || Game.level == 4) {
+			speed = 4;
+		}else if(Game.level >= 5) {
+			speed = 7;
+		}
+		
 		//System.out.println("X = " + this.getX());
 		//System.out.println("Y = " + this.getY());
 		
@@ -51,9 +57,18 @@ public class Player extends Entity{
 					life-= new Random().nextInt(12);
 				}else if(Game.level == 6) {
 					life-= new Random().nextInt(14);
-				}else {
+				}else if(Game.level == 7){
 					life-= new Random().nextInt(28);
+				}else {
+					life-= new Random().nextInt(80);
 				}
+			}
+		}
+		
+		for(int i = 0; i < Game.lifepacks.size(); i++) {
+			if(isColliding(this, Game.lifepacks.get(i))) {
+				life += new Random().nextInt(500);
+				Game.lifepacks.remove(i);
 			}
 		}
 	}

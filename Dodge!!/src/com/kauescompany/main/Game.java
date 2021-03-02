@@ -3,6 +3,7 @@ package com.kauescompany.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -18,6 +19,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import com.kauescompany.entites.Enemy;
+import com.kauescompany.entites.LifePack;
 import com.kauescompany.entites.Player;
 import com.kauescompany.graphics.Spritesheet;
 import com.kauescompany.graphics.UI;
@@ -31,8 +33,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = 160;
 	public static final int SCALE = 5;
+	public static final double VERSION = 1;
 	
 	public static List<Enemy> enemies;
+	public static List<LifePack> lifepacks;
 	
 	private BufferedImage image;
 	
@@ -53,6 +57,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		ui = new UI();
 		enemies = new ArrayList<Enemy>();
+		lifepacks = new ArrayList<LifePack>();
 		player = new Player(10, 10, 20, 20, null);
 		sheet = new Spritesheet("/spritesheet.png");
 		map = new Spritesheet("/map.png");
@@ -100,52 +105,66 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for(int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).tick();
 		}
+		for(int i = 0; i < lifepacks.size(); i++) {
+			lifepacks.get(i).tick();
+		}
 		
 		/**/
 		
 		cont++;
 		cont0++;
 		
-		if(cont >= 60) {
-			if(new Random().nextInt(100) < 12) {
-				type = new Random().nextInt(1);
-				System.out.println(type);
+		if(level >= 9) {
+			if(new Random().nextInt(100) < 50) {
 				enemies.add(new Enemy(0, 0, 0, 0, null));
 			}
-			System.out.println(level);
-			//very easy
-			if(cont >= (60) && level >= 1) {
-				if(new Random().nextInt(100) < 22) {
+		}
+		if(level == 8) {
+			if(new Random().nextInt(100) <= 10) {
+				enemies.add(new Enemy(0, 0, 0, 0, null));
+			}
+		}else {
+			if(cont >= 60) {
+				if(new Random().nextInt(100) < 12) {
+					type = new Random().nextInt(1);
+					System.out.println(type);
 					enemies.add(new Enemy(0, 0, 0, 0, null));
-				}}
-			//easy
-			if(cont >= (60) && level >= 2) {
-					if(new Random().nextInt(100) < 25) {
-				enemies.add(new Enemy(0, 0, 0, 0, null));
+				}
+				System.out.println(level);
+				//very easy
+				if(cont >= (60) && level >= 1) {
+					if(new Random().nextInt(100) < 22) {
+						enemies.add(new Enemy(0, 0, 0, 0, null));
 					}}
-			//medium
-			if(cont >= (60) && level >= 3) {
-				if(new Random().nextInt(100) < 32) {
-				enemies.add(new Enemy(0, 0, 0, 0, null));
-				}}
-			//medium
-			if(cont >= (60) && level >= 4) {
-				if(new Random().nextInt(100) < 45) {
-				enemies.add(new Enemy(0, 0, 0, 0, null));
-				}}
-			//normal
-			if(cont >= (60) && level >= 5) {
-				if(new Random().nextInt(100) < 75) {
-				enemies.add(new Enemy(0, 0, 0, 0, null));
-				}}
-			//hard
-			if(cont >= (60) && level >= 6) {
-				if(new Random().nextInt(100) < 75) {
-				enemies.add(new Enemy(0, 0, 0, 0, null));
-				}}
-			
-			ui.seconds++;
-			cont = 0;
+				//easy
+				if(cont >= (60) && level >= 2) {
+					if(new Random().nextInt(100) < 25) {
+						enemies.add(new Enemy(0, 0, 0, 0, null));
+					}}
+				//medium
+				if(cont >= (60) && level >= 3) {
+					if(new Random().nextInt(100) < 32) {
+						enemies.add(new Enemy(0, 0, 0, 0, null));
+					}}
+				//medium
+				if(cont >= (60) && level >= 4) {
+					if(new Random().nextInt(100) < 45) {
+						enemies.add(new Enemy(0, 0, 0, 0, null));
+					}}
+				//normal
+				if(cont >= (60) && level >= 5) {
+					if(new Random().nextInt(100) < 75) {
+						enemies.add(new Enemy(0, 0, 0, 0, null));
+					}}
+				//hard
+				if(cont >= (60) && level >= 6) {
+					if(new Random().nextInt(100) < 75) {
+						enemies.add(new Enemy(0, 0, 0, 0, null));
+					}}
+				
+				ui.seconds++;
+				cont = 0;
+			}
 		}
 		
 		
@@ -177,6 +196,10 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			level++;
 			cont0 = 0;
 		}
+		if(cont0 > (40 * 60) && level < 8) {
+			level++;
+			cont0 = 0;
+		}
 		
 		/*if(cont >= 60) {
 			enemies.add(new Enemy(0, 0, 0, 0, null));
@@ -203,7 +226,17 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		for(int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).render(g);
 		}
+		for(int i = 0; i < lifepacks.size(); i++) {
+			lifepacks.get(i).render(g);
+		}
 		ui.render(g);
+		
+		if(level == 8) {
+			g.setColor(Color.RED);
+			g.setFont(new Font("arial", Font.BOLD, 17));
+			g.drawString("PRESSIONE A TECLA 'F1' PARA ATIVAR O MODO IMPOSSÍVEL", 10, 20);
+		}
+		
 		/***/
 		
 		g.dispose();
@@ -247,6 +280,12 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	}
 	
 	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_F1) {
+			if(level == 8) {
+				level = 9;
+			}
+		}
+		
 		if(e.getKeyCode() == KeyEvent.VK_W
 			|| e.getKeyCode() == KeyEvent.VK_UP) {
 			player.up = true;
